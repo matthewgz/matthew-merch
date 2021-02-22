@@ -1,4 +1,5 @@
 import React, { Children, useContext } from 'react';
+import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { MdDeleteForever } from 'react-icons/md';
 import styled from 'styled-components';
@@ -75,33 +76,42 @@ const Checkout = () => {
   };
 
   return (
-    <Container>
-      <div>
-        {cart.length > 0 ? <h3>Lista de Pedidos:</h3> : <h3>Sin pedidos...</h3>}
+    <>
+      <Helmet>
+        <title>Lista de pedidos - Matthew Merch</title>
+      </Helmet>
+      <Container>
+        <div>
+          {cart.length > 0 ? (
+            <h3>Lista de Pedidos:</h3>
+          ) : (
+            <h3>Sin pedidos...</h3>
+          )}
 
-        {Children.toArray(
-          cart.map((item, i) => (
-            <Item>
-              <Element>
-                <h4>{item.title}</h4>
-                <span>$ {item.price}</span>
-              </Element>
-              <button type="button" onClick={handleRemove(item, i)}>
-                <MdDeleteForever className="fas" size={24} />
-              </button>
-            </Item>
-          ))
+          {Children.toArray(
+            cart.map((item, i) => (
+              <Item>
+                <Element>
+                  <h4>{item.title}</h4>
+                  <span>$ {item.price}</span>
+                </Element>
+                <button type="button" onClick={handleRemove(item, i)}>
+                  <MdDeleteForever className="fas" size={24} />
+                </button>
+              </Item>
+            ))
+          )}
+        </div>
+        {cart.length > 0 && (
+          <Sidebar>
+            <h3>Precio Total: $ {getSumTotal(cart)}</h3>
+            <Link to="/checkout/information">
+              <button type="button"> Continuar pedido </button>
+            </Link>
+          </Sidebar>
         )}
-      </div>
-      {cart.length > 0 && (
-        <Sidebar>
-          <h3>Precio Total: $ {getSumTotal(cart)}</h3>
-          <Link to="/checkout/information">
-            <button type="button"> Continuar pedido </button>
-          </Link>
-        </Sidebar>
-      )}
-    </Container>
+      </Container>
+    </>
   );
 };
 
